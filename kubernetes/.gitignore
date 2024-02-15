@@ -1,0 +1,4 @@
+test/*
+~*.docx
+~*.tmp
+.DS_Store
