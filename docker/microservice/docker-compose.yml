@@ -1,0 +1,24 @@
+# version: "1"
+redis:
+  image: redis
+db:
+  image: postgres:9.4
+  environment:
+    POSTGRES_PASSWORD: postgres
+vote-app:
+  build: ./vote
+  ports:
+    - 5000:80
+  links:
+    - redis:redis
+result-app:
+  build: ./result
+  ports:
+    - 5001:80
+  links:
+    - db:db
+worker-app:
+  build: ./worker
+  links:
+    - db:db
+    - redis:redis

@@ -1,0 +1,117 @@
+docker login -> login docker cli to docker account
+
+
+docker run ngnix -> pull either from local or remote and run it
+
+docker ps
+docker ps -a
+
+docker stop container_name/container_id -> to stop a running container
+
+docker rm container_name/container_id -> to remove a running container
+
+docker images -> to get all available images and its size
+
+docker rmi image_name -> to delete an available image
+
+docker pull nginx -> just to download an image, it will not run it
+
+container is meant to run a specific task like a server or a process. the container will be running as long as process inside in it will be in a living stage.
+So we can append a command into the process like this
+
+docker run ubuntu sleep 10 -> it will run ubuntu image and sleep for 10 sec. when 10 sec is completed then ubuntu will be stopped as it has no running process
+docker run ubuntu cat /etc/"os-release" -> ubuntu version
+
+docker exec -> Run a command in a running container
+docker exec -it ubuntu_bash bash -> This will create a new Bash session in the container ubuntu_bash.
+
+docker run -d ngnix -> pull either from local or remote and run it in a deattached mode and will return the container_id
+
+docker attach container_id -> it will again attach cmd to the docker container
+
+docker run -it ubuntu bash -> it will run ubuntu image and then run bash in interactive mode in the same command prompt
+here i mean interactive and t means same terminal
+
+docker run image_name/tag -> by deafult tag considered as latest 
+
+docker run -p our_port/docker_internal_port -> docker run -p 5000:80 nginx
+so nginx on port 80 on docker internal network will be connected to externally port 5000
+http://localhost:8080 or http://host-ip:8080 in your browser.
+
+
+docker run --env MYSQL_ROOT_PASSWORD=100997 mysql -> we can specify environment variable using --env
+
+docker run -v /opt/tempMysql:/var/lib/mysql --env MYSQL_ROOT_PASSWORD=100997 mysql -> -v means it map docker internal directory to external file storage
+
+docker inspect container_id/container_name -> to get more information about the image
+
+docker logs container_id/container_name -> to get logs for the container
+
+docker pull jenkins/jenkins
+docker run -p 8080:8080 --name=jenkins-master -d jenkins/jenkins
+
+docker images
+
+command vs entrypoint
+
+We can see the environment variables using docker inspect container_name/id -> networks and all other things are there
+
+
+docker run -d -p 5000:80 --name=server nginx
+------------------------------------------------------------------------------------------
+
+Docker compose
+
+docker build . -t voting-app
+docker build . -t worker-app
+docker build . -t result-app
+
+docker run -d --name=redis redis
+docker run -d -e POSTGRES_PASSWORD=10091997 --name=db postgres:9.4
+
+docker run -p 5000:80 --link redis:redis voting-app
+docker run -p 5001:80 --link db:db result-app
+docker run --link redis:redis --link db:db worker-app
+
+docker-compose up --build with docker-compose.yml
+------------------------------------------------------------------------------------------
+docker image prune -a ->  for deleting all images
+
+docker volume prune -> for deleting all volumes
+-------------------------------------------------------------------------
+
+Docker Engine -> Docker CLI + Rest API + Docker Deamon
+
+docker run -it --rm -p 8888:8080 tomcat:9.0
+
+docker ps -a
+CONTAINER ID   IMAGE        COMMAND             CREATED         STATUS         PORTS                                       NAMES
+2f11c8f2dc81   tomcat:9.0   "catalina.sh run"   2 minutes ago   Up 2 minutes   0.0.0.0:8888->8080/tcp, :::8888->8080/tcp   cool_heisenberg
+
+docker exec 2f11c8f2dc81 ps -eaf
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  1 04:16 pts/0    00:00:03 /usr/local/openjdk-11/bin/java -Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar -Dcatalina.base=/usr/local/tomcat -Dcatalina.home=/usr/local/tomcat -Djava.io.tmpdir=/usr/local/tomcat/temp org.apache.catalina.startup.Bootstrap start
+root        40     0  0 04:19 ?        00:00:00 ps -eaf
+
+ps -eaf | grep openjdk-11
+abhishek 15277 14811  0 10:00 pts/2    00:00:00 grep --color=auto openjdk-11
+
+-----------------------------------------------------------------------------------
+
+Volumes ->>
+docker volume create data_volume
+it will create a data_ volume folder under the volume directory of "var/lib/docker" directory
+
+docker run -v data_volume:var/lib/mysql mysql:latest -> this will mount the data_volume directory inside the docker 
+
+if we want to use external directory
+docker run -v external_path:var/lib/mysql mysql:latest
+
+docker run --mount type=bind,source=C:/Users/ghosh/OneDrive/Desktop/devops/data/mysql,target=/var/lib/mysql mysql
+
+docker uses the storage driver to do all volume and storage related things
+docker uses the different type of storge drivers
+
+
+-----------------------------------------------------------------------------------
+
